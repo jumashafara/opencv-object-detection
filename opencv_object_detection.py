@@ -1,7 +1,9 @@
 import cv2
+import time
 import cvlib
 from gtts import gTTS
-from playsound import playsound
+# from playsound import playsound
+from pygame import mixer
 from cvlib.object_detection import draw_bbox
 
 
@@ -9,10 +11,14 @@ def speak(text):
     print(text)
     language = 'en'
     output = gTTS(text=text, lang=language, slow=False)
-    output.save("./outputs/output.mp3")
-    playsound("./outputs/output.mp3")
-
-
+    output.save("./output/items.mp3")
+    
+    mixer.init()
+    mixer.music.load('./output/items.mp3')
+    mixer.music.play()
+    while mixer.music.get_busy():
+        time.sleep(1)
+    
 video = cv2.VideoCapture(index=0)
 labels = []
 
@@ -22,7 +28,7 @@ while True:
     output_image = draw_bbox(frame, bbox, label, conf)
     cv2.imshow("frame", output_image)
 
-    for item in labels:
+    for item in label:
         if item in labels:
             pass
         else:
